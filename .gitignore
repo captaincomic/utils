@@ -30,3 +30,13 @@
 
 # Debug files
 *.dSYM/
+
+# Temporary and backup files
+*.bak
+*.tmp
+
+# Resource files from game
+*.0
+*.1
+*.2
+*.3
