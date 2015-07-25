@@ -24,10 +24,10 @@
 // Simple encode function macros
 #define fputc_enc(c, f) fputc((c^0x25), (f))
 
-typedef struct RowCol {
+struct rowcol {
 	unsigned char columns;
 	unsigned char rows;
-} rowcol;
+};
 
 int main(int argc,char **argv)
 {
@@ -37,7 +37,7 @@ int main(int argc,char **argv)
 	int offsetsNum; // Total number of elements
 	char *inputFile;
 	char *outputFile;
-	rowcol RaC[MAX_ELEM_COUNT]; // Struct of rows and columns for each dialog
+	struct rowcol RaC[MAX_ELEM_COUNT]; // Struct of rows and columns for each dialog
 	char tmp[2]; // Temporary array for short int conversion
 	unsigned char buffer[BUFFER_LEN]; // Input buffer
 
@@ -82,8 +82,8 @@ int main(int argc,char **argv)
 		fclose(in);
 
 		offset[0]=0;
-		offsetsNum=0;
-		j=k=0; // Dialogs and string counter
+		offsetsNum=1; // At least one offset we have
+		j=k=0; // Dialogs and string buffer counters
 		RaC[0].rows=0;
 		RaC[0].columns=0;
 		for(i=0;i<fileSize;i++)
@@ -91,7 +91,7 @@ int main(int argc,char **argv)
 			switch(buffer[i])
 			{
 				case '\n':
-					if(RaC[j].rows==0 && k==0) // if string is empty
+					if(RaC[j].rows==0 && k==0) // if string is empty then trimming
 						offset[j]++;
 					else
 					{
@@ -168,7 +168,6 @@ int main(int argc,char **argv)
 					}
 				}
 			}
-			fputc_enc(0xFF, out); // Adding some shit at the end
 			fclose(out);
 			printf("Finished! Compiled %d dialog(s).\r\n", offsetsNum);
 		}
